@@ -2438,15 +2438,17 @@ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *s
 			int fd;
 #endif
 			
-            /* Get the current time */
-            time_t t;
-			if ((t = time(NULL)) == (time_t)-1) {
-               	error("dump_and_trunc_packet: can't get current_time: %s",
-				   pcap_strerror(errno));
+			if (Gflag != 0) {
+				/* Get the current time */
+				time_t t;
+				if ((t = time(NULL)) == (time_t)-1) {
+					error("dump_and_trunc_packet: can't get current_time: %s",
+					pcap_strerror(errno));
+				}
+				/* Update the Gflag_time */
+				Gflag_time = t;
+				/* (void)fprintf(stderr, "Gflag_time reseted at: %s\n", asctime(gmtime(&t))); */
 			}
-			/* Update the Gflag_time */
-			Gflag_time = t;
-			/* (void)fprintf(stderr, "Gflag_time reseted at: %s\n", asctime(gmtime(&t))); */
 
 			/*
 			 * Close the current file and open a new one.
